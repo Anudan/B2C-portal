@@ -4,8 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B2C Portal</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
 </head>
 <body>
-    
+    <header>
+        <h1>Online Shop</h1>
+
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search products...">
+            <select id="category">
+                <option value="All">All Categories</option>
+            </select>
+            <select id="sort">
+                <option value="popular">Popular</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+            </select>
+        </div>
+    </header>
+    <main>
+        <section id="products">
+            <!-- Product cards will be inserted by JS -->
+        </section>
+
+        <aside id="cart">
+            <h2>Cart (<span id="cart-count">0</span>)</h2>
+            <div id="cart-items"></div>
+            <div id="cart-total">Total: $0</div>
+            <button id="checkout">Checkout</button>
+        </aside>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="modal" class="hidden">
+        <div class="modal-content">
+            <span id="modal-close">&times;</span>
+            <img id="modal-img">
+            <h2 id="modal-title"></h2>
+            <p id="modal-desc"></p>
+            <div id="modal-price"></div>
+            <button id="modal-add">Add to Cart</button>
+        </div>
+    </div>
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
