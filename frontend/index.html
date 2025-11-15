@@ -1,52 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B2C Portal</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wine Cooler</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="B2C-portal\assets\css\style.css" >
 </head>
 <body>
-    <header>
-        <h1>Online Shop</h1>
 
-        <div class="controls">
-            <input type="text" id="search" placeholder="Search products...">
-            <select id="category">
-                <option value="All">All Categories</option>
-            </select>
-            <select id="sort">
-                <option value="popular">Popular</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-            </select>
-        </div>
-    </header>
-    <main>
-        <section id="products">
-            <!-- Product cards will be inserted by JS -->
-        </section>
+  <!-- HEADER -->
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        Wine Cooler <span>Premium Collection</span>
+      </div>
 
-        <aside id="cart">
-            <h2>Cart (<span id="cart-count">0</span>)</h2>
-            <div id="cart-items"></div>
-            <div id="cart-total">Total: $0</div>
-            <button id="checkout">Checkout</button>
-        </aside>
-    </main>
+      <nav class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#">Shop</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </nav>
 
-    <!-- Product Modal -->
-    <div id="modal" class="hidden">
-        <div class="modal-content">
-            <span id="modal-close">&times;</span>
-            <img id="modal-img">
-            <h2 id="modal-title"></h2>
-            <p id="modal-desc"></p>
-            <div id="modal-price"></div>
-            <button id="modal-add">Add to Cart</button>
-        </div>
+      <div class="nav-right">
+        <a href="#">Register</a>
+        <span>/</span>
+        <a href="#">Login</a>
+      </div>
     </div>
-    <script src="../assets/js/script.js"></script>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="hero">
+    <div class="container hero-inner">
+
+      <div class="hero-content">
+        <div class="hero-tag">Finest Wine</div>
+
+        <h1 class="hero-title">
+          Sangiovese <br>
+          Sierra Folia
+        </h1>
+
+        <p class="hero-subtitle">
+          Discover the delicate character of our Sangiovese Sierra Folia – crafted from carefully selected grapes and aged to reveal subtle notes of cherry, spice, and oak.
+        </p>
+
+        <div class="hero-cta">
+          <button class="btn-primary">Explore Wine</button>
+          <span class="hero-price">$8.90</span>
+        </div>
+
+        <div class="hero-meta">Limited vintage • Free shipping over $50</div>
+      </div>
+
+      <div class="hero-bottle">
+        <img src="wine-bottle.png" alt="Wine Bottle">
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section id="about" class="about">
+    <div class="container">
+
+      <div class="about-header">
+        <div class="about-step">01</div>
+        <div class="about-title">About Us</div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-image">
+          <div class="brush-bg"></div>
+          <img src="about-image.jpg" alt="Vineyard Image">
+        </div>
+
+        <div class="about-text">
+          <h3>Crafted in the Heart of the Hills</h3>
+          <p>
+            Our winery lies nestled among rolling vineyards where the climate, soil, and craftsmanship come together in perfect harmony.
+          </p>
+          <p>
+            Every bottle we produce carries the story of this land – balanced, refined, and unforgettable.
+          </p>
+          <a href="#" class="about-link">Explore More</a>
+        </div>
+      </div>
+
+      <div class="landscape-strip">
+        <img src="landscape-wide.jpg" alt="Vineyard Panorama">
+      </div>
+
+    </div>
+  </section>
+
 </body>
 </html>
