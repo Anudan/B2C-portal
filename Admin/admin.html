@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Portal - Wine Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- You can reuse your Google Fonts if you want -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      background: #f5f3ee;
+      color: #3e2f21;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #7a6a5c;
+      margin-bottom: 24px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee2d5;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      background: #f0e2d1;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .btn-danger {
+      background: #c94545;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 16px 18px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    }
+
+    .card h2 {
+      font-family: "Playfair Display", serif;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+
+    .field {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+    }
+
+    .field input,
+    .field textarea {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #d2c3b4;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .btn-primary {
+      margin-top: 8px;
+      background: #c08a3b;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #a8732f;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .top-bar a {
+      font-size: 13px;
+      color: #c08a3b;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div>
+      <h1>Admin Portal</h1>
+      <p class="subtitle">Manage products shown on the main site.</p>
+    </div>
+    <a href="index.html" target="_blank">View Shop →</a>
+  </div>
+
+  <div class="layout">
+    <!-- Product list -->
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price (₨)</th>
+            <th>Image</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add new product form -->
+    <div class="card">
+      <h2>Add / Update Product</h2>
+
+      <form id="productForm">
+        <input type="hidden" id="productId">
+
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" required>
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="price">Price (₨)</label>
+          <input id="price" type="number" min="0" required>
+        </div>
+
+        <div class="field">
+          <label for="image">Image file / URL</label>
+          <input id="image" placeholder="wine1.png or full URL">
+        </div>
+
+        <button type="submit" class="btn-primary">Save Product</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="products.js"></script>
+  <script>
+    let products = getProducts();
+    const tbody = document.getElementById('productTableBody');
+    const form = document.getElementById('productForm');
+
+    const idInput = document.getElementById('productId');
+    const nameInput = document.getElementById('name');
+    const descInput = document.getElementById('description');
+    const priceInput = document.getElementById('price');
+    const imageInput = document.getElementById('image');
+
+    function renderTable() {
+      tbody.innerHTML = "";
+      products.forEach(p => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${p.name}</td>
+          <td>${p.price}</td>
+          <td>${p.image}</td>
+          <td>
+            <button type="button" class="btn-danger" data-id="${p.id}">Delete</button>
+          </td>
+        `;
+
+        tr.addEventListener('click', (e) => {
+          // avoid overriding when clicking delete
+          if (e.target.matches('.btn-danger')) return;
+          loadIntoForm(p);
+        });
+
+        const deleteBtn = tr.querySelector('.btn-danger');
+        deleteBtn.addEventListener('click', () => deleteProduct(p.id));
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadIntoForm(product) {
+      idInput.value = product.id;
+      nameInput.value = product.name;
+      descInput.value = product.description;
+      priceInput.value = product.price;
+      imageInput.value = product.image;
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      saveProducts(products);
+      renderTable();
+      // clear form if we deleted the one being edited
+      if (idInput.value && Number(idInput.value) === id) {
+        form.reset();
+        idInput.value = "";
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const id = idInput.value ? Number(idInput.value) : Date.now();
+      const name = nameInput.value.trim();
+      const description = descInput.value.trim();
+      const price = Number(priceInput.value);
+      const image = imageInput.value.trim() || "wine-placeholder.png";
+
+      const existingIndex = products.findIndex(p => p.id === id);
+
+      const newProduct = { id, name, description, price, image };
+
+      if (existingIndex >= 0) {
+        products[existingIndex] = newProduct;
+      } else {
+        products.push(newProduct);
+      }
+
+      saveProducts(products);
+      renderTable();
+      form.reset();
+      idInput.value = "";
+    });
+
+    // initial render
+    renderTable();
+  </script>
+</body>
+</html>
