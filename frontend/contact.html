@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact • Urban Barrels</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    :root {
+      --panel-soft: #fffdf9;
+    }
+
+    body {
+      background: var(--bg);
+    }
+
+    .page {
+      padding-top: 90px;
+      padding-bottom: 100px;
+    }
+
+    .contact-hero {
+      background: linear-gradient(140deg, #fbf4ec, #f2e7db);
+      border-radius: 36px;
+      padding: 80px;
+      box-shadow: 0 30px 70px rgba(62, 47, 33, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(192, 138, 59, 0.25), transparent 55%);
+      mix-blend-mode: multiply;
+    }
+
+    .contact-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 48px;
+      color: var(--dark);
+      margin-bottom: 18px;
+    }
+
+    .contact-hero p {
+      max-width: 520px;
+      color: rgba(74, 59, 43, 0.85);
+      font-size: 16px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .contact-card {
+      background: var(--panel);
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(192, 138, 59, 0.18);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-label {
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--primary-soft);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .contact-value {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .contact-section {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 40px;
+    }
+
+    .contact-panel {
+      background: var(--panel-soft);
+      border-radius: 28px;
+      padding: 48px;
+      border: 1px solid rgba(192, 138, 59, 0.14);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-panel h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+
+    .contact-panel p {
+      color: rgba(74, 59, 43, 0.8);
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--primary-soft);
+      margin-bottom: 8px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(192, 138, 59, 0.25);
+      background: white;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--dark);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .btn-submit {
+      justify-self: flex-start;
+    }
+
+    .map-panel {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(192, 138, 59, 0.14);
+      min-height: 100%;
+    }
+
+    .map-panel iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      border: 0;
+      filter: grayscale(0.1) contrast(1.05) saturate(0.8);
+    }
+
+    @media (max-width: 992px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-section {
+        grid-template-columns: 1fr;
+      }
+      .contact-hero {
+        padding: 60px 32px;
+      }
+      .contact-panel {
+        padding: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        Urban Barrels <span>Premium Collection</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="#">Shop</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="nav-right">
+        <a href="#">Register</a>
+        <span>/</span>
+        <a href="#">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="contact-hero">
+        <h1>Visit Our Cellar Door</h1>
+        <p>We welcome tastemakers, collectors, and curious explorers to discover our curated whisky experiences. Let us know how we can help craft your next pour.</p>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <span class="contact-label">Call</span>
+            <div class="contact-value">9869135892</div>
+            <p>Weekdays 10am – 7pm</p>
+          </div>
+          <div class="contact-card">
+            <span class="contact-label">Write</span>
+            <div class="contact-value">hello@urbanbarrels.com</div>
+            <p>We reply within one business day</p>
+          </div>
+          <div class="contact-card">
+            <span class="contact-label">Visit</span>
+            <div class="contact-value">Buddhanagar, Kathmandu</div>
+             <!--- <div class="contact-card">
+                <span class="contact-label">Connect With Us</span>
+                <div class="contact-value">Facebook</div>
+                <div class="contact-value">Instagram</div>
+                <div class="contact-value">Twitter</div>
+         </div>-->
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section">
+        <div class="contact-panel">
+          <h2>Send us a note</h2>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+
+          <form>
+            <div>
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="Anudan Sainju" required>
+            </div>
+
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="anudansainju@example.com" required>
+            </div>
+
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell us about your request..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary btn-submit">Request Callback</button>
+          </form>
+        </div>
+
+        <div class="map-panel">
+          <iframe
+            title="Urban Barrels Estate"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4384.037788699143!2d85.33008947614059!3d27.68665362640264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19be4189062b%3A0xf9d2136c5fd0ffda!2sIntel%20Security%20Services!5e1!3m2!1sen!2snp!4v1763465465055!5m2!1sen!2snp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+
+          </iframe>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>
+

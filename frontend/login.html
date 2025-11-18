@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login • Urban Barrels</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        Urban Barrels <span>Premium Collection</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="#">Shop</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="nav-right">
+        <a href="#">Register</a>
+        <span>/</span>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="login-page">
+    <div class="container login-layout">
+
+      <div class="login-info">
+        <div class="login-tag">Members Club</div>
+        <h1>Welcome back to Urban Barrels</h1>
+        <p>Access concierge services, private cask releases, and curated tasting events crafted exclusively for our registered patrons.</p>
+
+        <ul class="login-benefits">
+          <li>Track orders & cellar allocations</li>
+          <li>Reserve tasting lounge experiences</li>
+          <li>Receive early release announcements</li>
+        </ul>
+
+        <div class="club-note">
+          <span>Need assistance?</span>
+          <p>Our cellar concierge is available 24/7 at <a href="tel:+919869135892">+91 9869 135 892</a>.</p>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <h2>Sign in</h2>
+        <p class="login-subtitle">Enter your registered email and password</p>
+
+        <form id="loginForm">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password" required>
+
+          <div class="login-actions">
+            <label class="remember">
+              <input type="checkbox" name="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-primary login-btn">Login</button>
+        </form>
+
+        <div class="social-login">
+          <span>or continue with</span>
+          <div class="social-buttons">
+            <button type="button" class="social-btn">Google</button>
+            <button type="button" class="social-btn">Apple</button>
+          </div>
+        </div>
+
+        <p class="login-footer">New to Urban Barrels? <a href="#">Create an account</a></p>
+        <p id="error" class="login-error"></p>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
