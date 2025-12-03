@@ -1,3 +1,7 @@
+
+// EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
+const SEND_EMAIL = false;
+
 document.getElementById("registerForm").addEventListener("submit", function(event){
     event.preventDefault();
 
@@ -10,25 +14,31 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         error.textContent = "Please fill all fields.";
     }
     else {
-        // Initialize EmailJS
-        emailjs.init("49ST1ACb66DTSZ7Kr");
+        if (SEND_EMAIL) {
+            // Initialize EmailJS
+            emailjs.init("49ST1ACb66DTSZ7Kr");
 
-        // Send email to the new user
-        const templateParams = {
-            to_name: username,
-            to_email: email,
-            message: "Welcome to Urban Barrels, " + username + "!\n\nYour account has been successfully created.\n\nUsername: " + username + "\nEmail: " + email
-        };
+            // Send email to the new user
+            const templateParams = {
+                to_name: username,
+                to_email: email,
+                message: "Welcome to Urban Barrels, " + username + "!\n\nYour account has been successfully created.\n\nUsername: " + username + "\nEmail: " + email
+            };
 
-        emailjs.send("service_gqp4jfc", "template_lkdy2rh", templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-                alert("Registration Successful! Welcome email sent.");
-                window.location.href = "login.html";
-            }, function(error) {
-                console.log('FAILED...', error);
-                alert("Registration Successful, but failed to send notification. Error: " + JSON.stringify(error));
-                window.location.href = "login.html";
-            });
+            emailjs.send("service_gqp4jfc", "template_lkdy2rh", templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert("Registration Successful! Welcome email sent.");
+                    window.location.href = "login.html";
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert("Registration Successful, but failed to send notification. Error: " + JSON.stringify(error));
+                    window.location.href = "login.html";
+                });
+        } else {
+            // Email disabled - redirect directly
+            alert("Registration Successful! (Email notifications disabled)");
+            window.location.href = "login.html";
+        }
     }
 });
