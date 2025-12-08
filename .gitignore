@@ -1,0 +1,25 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Environment variables (if you add them later)
+.env
+.env.local
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Database credentials (if stored separately)
+config/database.js
