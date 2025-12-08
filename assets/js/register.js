@@ -1,6 +1,9 @@
-
 // EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
 const SEND_EMAIL = false;
+
+
+// Backend API URL
+const API_URL = 'http://localhost:3000';
 
 // Function to calculate age from date of birth
 function calculateAge(dob) {
@@ -17,7 +20,7 @@ function calculateAge(dob) {
     return age;
 }
 
-document.getElementById("registerForm").addEventListener("submit", function(event){
+document.getElementById("registerForm").addEventListener("submit", async function(event){
     event.preventDefault();
 
     let username = document.getElementById("username").value.trim();
@@ -26,8 +29,10 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     let dob = document.getElementById("dob").value;
     let error = document.getElementById("error");
 
+    // Validate all fields are filled
     if(username === "" || email === "" || password === "" || dob === ""){
         error.textContent = "Please fill all fields.";
+        error.style.color = "red";
         return;
     }
 
@@ -40,34 +45,63 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         return;
     }
 
-    // Clear any previous error messages
-    error.textContent = "";
-    
-    // Proceed with registration
-    if (SEND_EMAIL) {
-        // Initialize EmailJS
-        emailjs.init("49ST1ACb66DTSZ7Kr");
+    // Show loading state
+    error.textContent = "Registering...";
+    error.style.color = "blue";
 
-        // Send email to the new user
-        const templateParams = {
-            to_name: username,
-            to_email: email,
-            message: "Welcome to Urban Barrels, " + username + "!\n\nYour account has been successfully created.\n\nUsername: " + username + "\nEmail: " + email + "\nDate of Birth: " + dob
-        };
+    try {
+        // Call backend API to register user
+        const response = await fetch(`${API_URL}/api/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                name: username, 
+                email: email, 
+                password: password,
+                dob: dob
+            })
+        });
 
-        emailjs.send("service_gqp4jfc", "template_lkdy2rh", templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-                alert("Registration Successful! Welcome email sent.");
+        const data = await response.json();
+
+        if (data.success) {
+            error.textContent = "";
+            
+            if (SEND_EMAIL) {
+                // Initialize EmailJS
+                emailjs.init("49ST1ACb66DTSZ7Kr");
+
+                // Send email to the new user
+                const templateParams = {
+                    to_name: username,
+                    to_email: email,
+                    message: "Welcome to Urban Barrels, " + username + "!\n\nYour account has been successfully created.\n\nUsername: " + username + "\nEmail: " + email + "\nDate of Birth: " + dob
+                };
+
+                emailjs.send("service_gqp4jfc", "template_lkdy2rh", templateParams)
+                    .then(function(response) {
+                        console.log('SUCCESS!', response.status, response.text);
+                        alert("Registration Successful! Welcome email sent.");
+                        window.location.href = "login.html";
+                    }, function(error) {
+                        console.log('FAILED...', error);
+                        alert("Registration Successful, but failed to send notification.");
+                        window.location.href = "login.html";
+                    });
+            } else {
+                // Email disabled - redirect directly
+                alert("Registration Successful! You can now login.");
                 window.location.href = "login.html";
-            }, function(error) {
-                console.log('FAILED...', error);
-                alert("Registration Successful, but failed to send notification. Error: " + JSON.stringify(error));
-                window.location.href = "login.html";
-            });
-    } else {
-        // Email disabled - redirect directly
-        alert("Registration Successful! (Email notifications disabled)");
-        window.location.href = "login.html";
+            }
+        } else {
+            error.textContent = data.message || "Registration failed";
+            error.style.color = "red";
+        }
+    } catch (err) {
+        console.error('Registration error:', err);
+        error.textContent = "Unable to connect to server. Please make sure the backend is running.";
+        error.style.color = "red";
     }
 });
