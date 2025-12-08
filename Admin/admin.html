@@ -14,7 +14,7 @@
 
   <div class="top-bar">
     <div>
-      <h1>Admin Portal</h1>
+      <h1 id="adminGreeting">Admin Portal</h1>
       <p class="subtitle">Manage products shown on the main site.</p>
     </div>
     <a href="../frontend/index.html" target="_blank">View Shop →</a>
@@ -72,6 +72,20 @@
 
   <script src="products.js"></script>
   <script>
+    // Display personalized greeting for logged-in admin
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const greetingElement = document.getElementById('adminGreeting');
+    
+    if (user && user.name) {
+      // Extract first name for greeting
+      const firstName = user.name.split(' ')[0];
+      greetingElement.textContent = `Hello ${firstName}!`;
+    } else {
+      // If no user data, redirect to login
+      alert('Please login first');
+      window.location.href = '../frontend/login.html';
+    }
+
     let products = getProducts();
     const tbody = document.getElementById('productTableBody');
     const form = document.getElementById('productForm');
