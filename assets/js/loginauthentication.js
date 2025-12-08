@@ -40,6 +40,15 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
             // Store user info in sessionStorage
             sessionStorage.setItem('user', JSON.stringify(data.user));
             
+            // Determine redirect based on role
+            let redirectUrl;
+            if (data.user.role === 'admin') {
+                redirectUrl = "../Admin/admin.html";
+            } else {
+                // Customer - redirect to home
+                redirectUrl = "index.html";
+            }
+            
             if (SEND_EMAIL) {
                 // Initialize EmailJS
                 emailjs.init("49ST1ACb66DTSZ7Kr");
@@ -48,25 +57,23 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                 const templateParams = {
                     to_name: data.user.name,
                     to_email: data.user.email,
-                    message: "Hi " + data.user.name + ", \n\nAdmin logged in successfully at " + new Date().toLocaleString()
+                    message: "Hi " + data.user.name + ", \n\n" + (data.user.role === 'admin' ? 'Admin' : 'You') + " logged in successfully at " + new Date().toLocaleString()
                 };
 
                 emailjs.send("service_gqp4jfc", "template_eq7ezoa", templateParams)
                     .then(function(response) {
                         console.log('SUCCESS!', response.status, response.text);
                         alert("Login successful! Email notification sent.");
-                        // Redirect to admin dashboard
-                        window.location.href = "../Admin/admin.html";
+                        window.location.href = redirectUrl;
                     }, function(error) {
                         console.log('FAILED...', error);
-                        alert("Login successful, but failed to send email. Error: " + JSON.stringify(error));
-                        // Redirect anyway as login was successful
-                        window.location.href = "../Admin/admin.html";
+                        alert("Login successful, but failed to send email.");
+                        window.location.href = redirectUrl;
                     });
             } else {
                 // Email disabled - redirect directly
-                alert("Login successful! (Email notifications disabled)");
-                window.location.href = "../Admin/admin.html";
+                alert("Login successful!");
+                window.location.href = redirectUrl;
             }
         } else {
             error.textContent = data.message || "Invalid email or password";

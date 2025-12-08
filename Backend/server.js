@@ -41,9 +41,9 @@ app.post('/api/login', (req, res) => {
     }
 
     // Query database for user with matching email
-    const query = 'SELECT user_id, name, email, role FROM users WHERE email = ? AND password = ? AND role = ?';
+    const query = 'SELECT user_id, name, email, role FROM users WHERE email = ? AND password = ?';
     
-    db.query(query, [email, password, 'admin'], (err, results) => {
+    db.query(query, [email, password], (err, results) => {
         if (err) {
             console.error('Database error:', err);
             return res.status(500).json({ 

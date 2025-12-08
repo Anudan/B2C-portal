@@ -44,7 +44,23 @@
         <img src="wine-bottle.png" alt="Whisky Bottle">
       </div>
     </div>
+    
+    <!-- Customer Welcome Greeting -->
+    <div id="customerGreeting" style="position: absolute; top: 20px; left: 20px; font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 500; color: #8B7355; display: none;">
+    </div>
   </section>
+  
+  <script>
+    // Display welcome message if customer is logged in
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    if (user && user.name && user.role === 'customer') {
+      const greetingElement = document.getElementById('customerGreeting');
+      const firstName = user.name.split(' ')[0];
+      greetingElement.textContent = `Welcome back, ${firstName}!`;
+      greetingElement.style.display = 'block';
+    }
+  </script>
+  
   <!-- WINE VARIETIES SECTION -->
 <section class="varieties">
   <div class="container">
