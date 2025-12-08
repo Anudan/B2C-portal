@@ -77,13 +77,13 @@ app.post('/api/login', (req, res) => {
 
 // Registration API endpoint (for customers)
 app.post('/api/register', (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, dob } = req.body;
 
     // Validate input
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !dob) {
         return res.status(400).json({ 
             success: false, 
-            message: 'Please provide name, email, and password' 
+            message: 'Please provide name, email, password, and date of birth' 
         });
     }
 
@@ -106,8 +106,8 @@ app.post('/api/register', (req, res) => {
         }
 
         // Insert new user
-        const insertQuery = 'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)';
-        db.query(insertQuery, [name, email, password, 'customer'], (err, result) => {
+        const insertQuery = 'INSERT INTO users (name, email, password, date_of_birth, role) VALUES (?, ?, ?, ?, ?)';
+        db.query(insertQuery, [name, email, password, dob, 'customer'], (err, result) => {
             if (err) {
                 console.error('Database error:', err);
                 return res.status(500).json({ 
