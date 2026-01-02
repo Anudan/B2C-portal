@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -26,7 +28,68 @@ db.connect((err) => {
         return;
     }
     console.log('Connected to MySQL database: UrbanBarrels');
+
+    // Self-healing: Ensure products table has stock_quantity column
+    const checkColumnsQuery = "SHOW COLUMNS FROM products LIKE 'stock_quantity'";
+    db.query(checkColumnsQuery, (err, results) => {
+        if (!err && results.length === 0) {
+            console.log('Adding missing stock_quantity column to products table...');
+            const addColumnQuery = "ALTER TABLE products ADD COLUMN stock_quantity INT DEFAULT 0 AFTER price";
+            db.query(addColumnQuery, (err) => {
+                if (err) console.error('Error adding stock_quantity column:', err);
+                else console.log('Successfully added stock_quantity column.');
+            });
+        }
+    });
 });
+
+// ============ FILE UPLOAD CONFIGURATION ============
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '../assets/images/'));
+    },
+    filename: function (req, file, cb) {
+        // Generate unique filename: timestamp + original extension
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: function (req, file, cb) {
+        // Accept only image files
+        const allowedTypes = /jpeg|jpg|png|gif|webp|jfif/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'));
+        }
+    }
+});
+
+// Image upload endpoint
+app.post('/api/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({
+            success: false,
+            message: 'No file uploaded'
+        });
+    }
+    
+    res.json({
+        success: true,
+        message: 'File uploaded successfully',
+        filename: req.file.filename
+    });
+});
+
 
 // Login API endpoint
 app.post('/api/login', (req, res) => {
@@ -126,6 +189,148 @@ app.post('/api/register', (req, res) => {
                     role: 'customer'
                 }
             });
+        });
+    });
+});
+
+// ============ PRODUCT MANAGEMENT API ENDPOINTS ============
+
+// GET all products
+app.get('/api/products', (req, res) => {
+    const query = 'SELECT * FROM products ORDER BY created_at DESC';
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Failed to fetch products' 
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            products: results 
+        });
+    });
+});
+
+// POST - Create new product
+app.post('/api/products', (req, res) => {
+    const { product_name, description, category, price, stock_quantity, image_url } = req.body;
+    
+    // Validate required fields
+    if (!product_name || !price) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Product name and price are required' 
+        });
+    }
+    
+    const query = `INSERT INTO products 
+        (product_name, description, category, price, stock_quantity, image_url) 
+        VALUES (?, ?, ?, ?, ?, ?)`;
+    
+    db.query(query, [
+        product_name, 
+        description || null, 
+        category || null, 
+        price, 
+        stock_quantity || 0, 
+        image_url || null
+    ], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Failed to create product' 
+            });
+        }
+        
+        res.status(201).json({ 
+            success: true, 
+            message: 'Product created successfully',
+            product_id: result.insertId
+        });
+    });
+});
+
+// PUT - Update existing product
+app.put('/api/products/:id', (req, res) => {
+    const productId = req.params.id;
+    const { product_name, description, category, price, stock_quantity, image_url, is_active } = req.body;
+    
+    // Validate required fields
+    if (!product_name || !price) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Product name and price are required' 
+        });
+    }
+    
+    const query = `UPDATE products 
+        SET product_name = ?, description = ?, category = ?, price = ?, 
+            stock_quantity = ?, image_url = ?, is_active = ?
+        WHERE product_id = ?`;
+    
+    db.query(query, [
+        product_name, 
+        description || null, 
+        category || null, 
+        price, 
+        stock_quantity || 0, 
+        image_url || null,
+        is_active !== undefined ? is_active : true,
+        productId
+    ], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Failed to update product' 
+            });
+        }
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Product not found' 
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            message: 'Product updated successfully' 
+        });
+    });
+});
+
+// DELETE - Remove product (hard delete)
+app.delete('/api/products/:id', (req, res) => {
+    const productId = req.params.id;
+    
+    // Hard delete - permanently remove from database
+    const query = 'DELETE FROM products WHERE product_id = ?';
+    
+    db.query(query, [productId], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Failed to delete product' 
+            });
+        }
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Product not found' 
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            message: 'Product deleted successfully' 
         });
     });
 });
