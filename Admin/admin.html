@@ -214,6 +214,7 @@
       
       const success = await deleteProductFromDB(id);
       if (success) {
+        alert('Product deleted successfully');
         // Reload products from database
         products = await getProducts();
         renderTable();

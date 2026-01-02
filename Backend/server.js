@@ -197,7 +197,7 @@ app.post('/api/register', (req, res) => {
 
 // GET all products
 app.get('/api/products', (req, res) => {
-    const query = 'SELECT * FROM products WHERE is_active = TRUE ORDER BY created_at DESC';
+    const query = 'SELECT * FROM products ORDER BY created_at DESC';
     
     db.query(query, (err, results) => {
         if (err) {
@@ -305,12 +305,12 @@ app.put('/api/products/:id', (req, res) => {
     });
 });
 
-// DELETE - Remove product (soft delete)
+// DELETE - Remove product (hard delete)
 app.delete('/api/products/:id', (req, res) => {
     const productId = req.params.id;
     
-    // Soft delete by setting is_active to FALSE
-    const query = 'UPDATE products SET is_active = FALSE WHERE product_id = ?';
+    // Hard delete - permanently remove from database
+    const query = 'DELETE FROM products WHERE product_id = ?';
     
     db.query(query, [productId], (err, result) => {
         if (err) {
