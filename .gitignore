@@ -23,3 +23,17 @@ Thumbs.db
 
 # Database credentials (if stored separately)
 config/database.js
+
+# Uploaded images
+assets/images/*
+!assets/images/.gitkeep
+
+# Common image formats
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.jfif
+*.ico
+*.svg
