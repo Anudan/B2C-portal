@@ -1,9 +1,9 @@
 // ==========================================
 // CONFIGURATION - UPDATE THESE VALUES
 // ==========================================
-const EMAILJS_USER_ID = "49ST1ACb66DTSZ7Kr";        // Your EmailJS Public Key
-const EMAILJS_SERVICE_ID = "service_gqp4jfc";          // Your EmailJS Service ID
-const EMAILJS_TEMPLATE_ID = "template_eq7ezoa";        // Your EmailJS Template ID
+const EMAILJS_USER_ID = "YOUR_EMAILJS_USER_ID";        // Your EmailJS Public Key
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";          // Your EmailJS Service ID
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";        // Your EmailJS Template ID
 const API_BASE_URL = "http://localhost:3000";          // Your backend URL
 const REDIRECT_URL = "../index.html";                  // Your homepage URL
 
