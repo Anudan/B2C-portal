@@ -7,7 +7,260 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- EmailJS Library - MUST LOAD BEFORE loginauthentication.js -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <style>
+    /* Additional styles for 2FA */
+    .hidden {
+      display: none !important;
+    }
+    
+    /* Step Indicator */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .step {
+      width: 40px;
+      height: 4px;
+      background: rgba(192,138,59,.2);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    
+    .step.active {
+      background: #C08A3B;
+      box-shadow: 0 0 8px rgba(192,138,59,.3);
+    }
+    
+    /* Security Badge */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(40,167,69,.08);
+      border: 1px solid rgba(40,167,69,.2);
+      border-radius: 10px;
+      color: #28a745;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    /* Email Display */
+    .email-display {
+      background: rgba(192,138,59,.08);
+      border: 1px solid rgba(192,138,59,.2);
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #3E2F21;
+      font-weight: 500;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .email-display span {
+      color: #C08A3B;
+      font-weight: 600;
+    }
+    
+    /* OTP Input */
+    #otp {
+      font-size: 24px;
+      letter-spacing: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      padding: 16px;
+    }
+    
+    #otp::placeholder {
+      letter-spacing: 8px;
+      opacity: 0.3;
+    }
+    
+    /* Timer */
+    .timer {
+      font-size: 13px;
+      opacity: .75;
+      margin-top: 16px;
+      text-align: center;
+      color: #3E2F21;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .timer.expired {
+      color: #dc3545;
+      opacity: 1;
+      font-weight: 600;
+    }
+    
+    .timer.warning {
+      color: #ff9800;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.75; }
+      50% { opacity: 1; }
+    }
+    
+    /* Button Row */
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .button-row button {
+      flex: 1;
+    }
+    
+    .btn-secondary {
+      background: #8B7355 !important;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: #705C43 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139,115,85,.3);
+    }
+    
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Password Wrapper */
+    .password-wrapper {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #B28963;
+      font-size: 18px;
+      user-select: none;
+      transition: all 0.2s ease;
+      padding: 4px;
+    }
+    
+    .toggle-password:hover {
+      color: #C08A3B;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    /* Back Button */
+    .back-to-login {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #C08A3B;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    
+    .back-to-login:hover {
+      color: #8B7355;
+      transform: translateX(-4px);
+    }
+    
+    /* Loading State */
+    .btn-primary:disabled,
+    .btn-secondary:disabled {
+      position: relative;
+      pointer-events: none;
+    }
+    
+    .btn-primary:disabled::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-left: -8px;
+      margin-top: -8px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.6s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* OTP Instructions */
+    .otp-instructions {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    
+    /* Success/Error Messages */
+    .login-error {
+      margin-top: 16px;
+      font-size: 14px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      #otp {
+        font-size: 20px;
+        letter-spacing: 6px;
+        padding: 14px;
+      }
+      
+      .button-row {
+        flex-direction: column;
+      }
+      
+      .button-row button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -34,41 +287,115 @@
       </div>
 
       <div class="login-card">
-        <h2>Sign in</h2>
-        <p class="login-subtitle">Enter your registered email and password</p>
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+          <div class="step active" id="step1"></div>
+          <div class="step" id="step2"></div>
+        </div>
 
-        <form id="loginForm">
+        <h2 id="pageTitle">Sign in</h2>
+        <p class="login-subtitle" id="pageSubtitle">Enter your registered email and password</p>
+
+        <!-- STEP 1: Login Form -->
+        <form id="loginForm" class="step-form">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
 
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required>
+          <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
+            <span class="toggle-password" id="togglePassword" title="Toggle password visibility">👁️</span>
+          </div>
 
           <div class="login-actions">
             <label class="remember">
-              <input type="checkbox" name="remember">
+              <input type="checkbox" name="remember" id="rememberMe">
               <span>Remember me</span>
             </label>
             <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" class="btn-primary login-btn">Login</button>
+          <button type="submit" class="btn-primary login-btn" id="loginBtn">Login</button>
         </form>
 
-        <div class="social-login">
+        <!-- STEP 2: OTP Verification Form -->
+        <form id="otpForm" class="step-form hidden">
+          <!-- Back to Login Link -->
+          <a href="#" class="back-to-login" id="backToLogin">
+            ← Back to login
+          </a>
+
+          <!-- Security Badge -->
+          <div class="security-badge">
+            🔒 Two-Factor Authentication Enabled
+          </div>
+
+          <!-- Email Display -->
+          <div class="email-display">
+            📧 OTP sent to: <span id="userEmail"></span>
+          </div>
+
+          <!-- OTP Input -->
+          <label for="otp">Enter 6-Digit Verification Code</label>
+          <input 
+            type="text" 
+            id="otp" 
+            name="otp" 
+            inputmode="numeric" 
+            maxlength="6" 
+            placeholder="000000" 
+            required 
+            autocomplete="one-time-code"
+            autofocus>
+
+          <!-- Instructions -->
+          <p class="otp-instructions">
+            Check your email inbox (and spam folder) for the verification code.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="button-row">
+            <button type="submit" class="btn-primary" id="verifyBtn">Verify & Login</button>
+            <button type="button" class="btn-secondary" id="resendBtn">Resend Code</button>
+          </div>
+
+          <!-- Timer -->
+          <div class="timer" id="timer">
+            ⏱️ <span id="timerText">Expires in 5:00</span>
+          </div>
+        </form>
+
+        <!-- Social Login (Only visible on Step 1) -->
+        <div class="social-login" id="socialLogin">
           <span>or continue with</span>
           <div class="social-buttons">
-            <button type="button" class="social-btn">Google</button>
-            <button type="button" class="social-btn">Apple</button>
+            <button type="button" class="social-btn" onclick="alert('Google login coming soon!')">Google</button>
+            <button type="button" class="social-btn" onclick="alert('Apple login coming soon!')">Apple</button>
           </div>
         </div>
 
-        <p class="login-footer">New to Urban Barrels? <a href="#">Create an account</a></p>
+        <!-- Footer -->
+        <p class="login-footer" id="loginFooter">New to Urban Barrels? <a href="register.html">Create an account</a></p>
+        
+        <!-- Error/Success Message -->
         <p id="error" class="login-error"></p>
       </div>
 
     </div>
   </main>
+  
+  <!-- Your Login Authentication Script - MUST LOAD AFTER EmailJS -->
   <script src="../assets/js/loginauthentication.js"></script>
+
+  <!-- Console Log Check for EmailJS -->
+  <script>
+    if (typeof emailjs === 'undefined') {
+      console.error('❌ CRITICAL: EmailJS library failed to load!');
+      console.error('Check your internet connection or CDN availability.');
+      alert('Email service unavailable. Please check your internet connection and refresh the page.');
+    } else {
+      console.log('✅ EmailJS library loaded successfully');
+    }
+  </script>
 </body>
 </html>
