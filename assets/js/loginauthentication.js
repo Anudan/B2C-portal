@@ -1,5 +1,5 @@
 // EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
-const SEND_EMAIL = false;
+const SEND_EMAIL = true;
 
 // Backend API URL
 const API_URL = 'http://localhost:3000';
