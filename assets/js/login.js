@@ -1,13 +1,3 @@
-// EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
-const SEND_EMAIL = true;
-
-// Backend API URL
-const API_URL = 'http://localhost:3000';
-
-// EmailJS Configuration
-const EMAILJS_USER_ID = "49ST1ACb66DTSZ7Kr";           
-const EMAILJS_SERVICE_ID = "service_gqp4jfc";          
-const EMAILJS_TEMPLATE_ID = "template_eq7ezoa";        
 
 // ==========================================
 // DOM ELEMENTS
@@ -24,7 +14,7 @@ const errorMsg = document.getElementById('error');
 // INITIALIZE EMAILJS
 // ==========================================
 if (typeof emailjs !== 'undefined') {
-    emailjs.init(EMAILJS_USER_ID);
+    emailjs.init(CONFIG.EMAILJS_USER_ID);
 }
 
 // ==========================================
@@ -46,7 +36,7 @@ loginForm.addEventListener('submit', async (event) => {
     showLoading("Logging in...");
 
     try {
-        const response = await fetch(`${API_URL}/api/login`, {
+        const response = await fetch(`${CONFIG.API_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -55,7 +45,7 @@ loginForm.addEventListener('submit', async (event) => {
         const data = await response.json();
 
         if (data.success) {
-            if (SEND_EMAIL) {
+            if (CONFIG.SEND_EMAIL) {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                 const expiry = Date.now() + 5 * 60 * 1000;
 
@@ -78,7 +68,7 @@ loginForm.addEventListener('submit', async (event) => {
                     message: `Your verification code is: ${otp}. Valid for 5 minutes.`
                 };
 
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+                await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams);
                 
                 showSuccess('Credentials verified! Redirecting to OTP verification...');
                 setTimeout(() => {

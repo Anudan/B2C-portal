@@ -1,13 +1,6 @@
-// EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
-const SEND_EMAIL = false;
-
-// Backend API URL
-const API_URL = 'http://localhost:3000';
-
-// EmailJS Configuration
-const EMAILJS_USER_ID = "49ST1ACb66DTSZ7Kr";           
-const EMAILJS_SERVICE_ID = "service_gqp4jfc";          
-const EMAILJS_TEMPLATE_ID = "template_eq7ezoa";        
+// ==========================================
+// STATE MANAGEMENT (Retrieved from sessionStorage)
+// ==========================================
 
 // ==========================================
 // STATE MANAGEMENT (Retrieved from sessionStorage)
@@ -46,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize EmailJS
     if (typeof emailjs !== 'undefined') {
-        emailjs.init(EMAILJS_USER_ID);
+        emailjs.init(CONFIG.EMAILJS_USER_ID);
     }
 
     startTimer();
@@ -137,9 +130,13 @@ resendBtn.addEventListener('click', async () => {
             message: `Your new verification code is: ${generatedOTP}. Valid for 5 minutes.`
         };
 
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-        
-        showSuccess('New OTP sent! Check your email.');
+        if (CONFIG.SEND_EMAIL) {
+            await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams);
+            showSuccess('New OTP sent! Check your email.');
+        } else {
+            console.log('Skipping email resend (SEND_EMAIL = false). New OTP:', generatedOTP);
+            showSuccess('New OTP generated (Simulation Mode). Code is: ' + generatedOTP);
+        }
         clearInterval(timerInterval);
         startTimer();
         otpInput.value = '';

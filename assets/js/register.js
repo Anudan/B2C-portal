@@ -1,9 +1,4 @@
-// EMAIL TOGGLE: Set to true to enable email notifications, false to disable (for testing)
-const SEND_EMAIL = false;
-
-
-// Backend API URL
-const API_URL = 'http://localhost:3000';
+// Function to calculate age from date of birth
 
 // Function to calculate age from date of birth
 function calculateAge(dob) {
@@ -51,7 +46,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     try {
         // Call backend API to register user
-        const response = await fetch(`${API_URL}/api/register`, {
+        const response = await fetch(`${CONFIG.API_URL}/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,9 +64,9 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         if (data.success) {
             error.textContent = "";
             
-            if (SEND_EMAIL) {
+            if (CONFIG.SEND_EMAIL) {
                 // Initialize EmailJS
-                emailjs.init("49ST1ACb66DTSZ7Kr");
+                emailjs.init(CONFIG.EMAILJS_USER_ID);
 
                 // Send email to the new user
                 const templateParams = {
@@ -80,7 +75,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
                     message: "Welcome to Urban Barrels, " + username + "!\n\nYour account has been successfully created.\n\nUsername: " + username + "\nEmail: " + email + "\nDate of Birth: " + dob
                 };
 
-                emailjs.send("service_gqp4jfc", "template_lkdy2rh", templateParams)
+                emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_REGISTER_TEMPLATE_ID, templateParams)
                     .then(function(response) {
                         console.log('SUCCESS!', response.status, response.text);
                         alert("Registration Successful! Welcome email sent.");
