@@ -50,24 +50,27 @@
           <h2>Send us a note</h2>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
 
-          <form>
-            <div>
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" placeholder="Anudan Sainju" required>
-            </div>
+<form id="contactForm" action="https://formspree.io/f/xnjnrdql" method="POST">
+  <div>
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" placeholder="Anudan Sainju" required>
+  </div>
 
-            <div>
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="anudansainju@example.com" required>
-            </div>
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="anudansainju@example.com" required>
+  </div>
 
-            <div>
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="Tell us about your request..."></textarea>
-            </div>
+  <div>
+    <label for="message">Message</label>
+    <textarea id="message" name="message" placeholder="Tell us about your request..."></textarea>
+  </div>
 
-            <button type="submit" class="btn-primary btn-submit">Request Callback</button>
-          </form>
+  <button type="submit" class="btn-primary btn-submit">Request Callback</button>
+  
+  <!-- Status message (optional) -->
+  <div id="formStatus" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+</form>
         </div>
 
         <div class="map-panel">
