@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify OTP • Urban Barrels</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/verify-otp.css">
+  
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+
+  <script src="../assets/js/header.js"></script>
+
+  <main class="login-page">
+    <div class="container login-layout">
+
+      <div class="login-info">
+        <div class="login-tag">Security First</div>
+        <h1>Identity Verification</h1>
+        <p>To protect your account and ensure your collection's security, we've sent a verification code to your email.</p>
+
+        <ul class="login-benefits">
+          <li>Secure 2-Factor Authentication</li>
+          <li>Protection against unauthorized access</li>
+          <li>Encrypted session management</li>
+        </ul>
+
+        <div class="club-note">
+          <span>Need assistance?</span>
+          <p>Contact our security team at <a href="tel:+919869135892">+91 9869 135 892</a> if you didn't receive the code.</p>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <h2>Verify OTP</h2>
+        <p class="login-subtitle">Enter the 6-digit code we sent to your email</p>
+
+        <form id="otpForm">
+          <a href="login.html" class="back-to-login">
+            ← Back to login
+          </a>
+
+          <div class="security-badge">
+            🔒 Two-Factor Authentication Enabled
+          </div>
+
+          <div class="email-display">
+            📧 OTP sent to: <span id="userEmail"></span>
+          </div>
+
+          <label for="otp">Enter 6-Digit Verification Code</label>
+          <input 
+            type="text" 
+            id="otp" 
+            name="otp" 
+            inputmode="numeric" 
+            maxlength="6" 
+            placeholder="000000" 
+            required 
+            autocomplete="one-time-code"
+            autofocus>
+
+          <p class="otp-instructions">
+            Check your email inbox (and spam folder). Code is valid for 5 minutes.
+          </p>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary" id="verifyBtn">Verify & Login</button>
+            <button type="button" class="btn-secondary" id="resendBtn">Resend Code</button>
+          </div>
+
+          <div class="timer" id="timer">
+            ⏱️ <span id="timerText">Expires in 5:00</span>
+          </div>
+        </form>
+
+        <p id="error" class="login-error"></p>
+      </div>
+
+    </div>
+  </main>
+  
+  <script src="../assets/js/verify-otp.js"></script>
+</body>
+</html>
