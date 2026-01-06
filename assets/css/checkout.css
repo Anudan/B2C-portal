@@ -1,0 +1,38 @@
+ .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .checkout-form input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(192, 138, 59, 0.2);
+            background: #fff;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .order-success {
+            display: none;
+            text-align: center;
+            padding: 60px 0;
+        }
+        .order-success h2 {
+            font-family: "Playfair Display", serif;
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 20px;
+        }

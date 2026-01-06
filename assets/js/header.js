@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
       </nav>
 
       <div class="nav-right"> 
+        <a href="cart.html" class="cart-link">
+            Cart <span id="cart-count">0</span>
+        </a>
+        <span class="nav-divider">|</span>
         <a href="register.html">Register</a>
         <span>/</span>
         <a href="login.html">Login</a>
@@ -24,6 +28,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Insert header at the beginning of the body
   document.body.insertAdjacentHTML("afterbegin", headerHTML);
+
+  // Function to update cart count in header
+  function updateHeaderCartCount() {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement && window.CartLogic) {
+        cartCountElement.textContent = window.CartLogic.getCartCount();
+    }
+  }
+
+  // Initial update
+  updateHeaderCartCount();
+
+  // Listen for cart updates
+  window.addEventListener('cartUpdated', updateHeaderCartCount);
 
   // Highlight active link
   const currentPath = window.location.pathname.split("/").pop() || "index.html";

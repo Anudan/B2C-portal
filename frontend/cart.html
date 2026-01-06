@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Barrels | Shopping Cart</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/cart.css">
+</head>
+<body class="cart-page">
+
+    <!-- HEADER -->
+    <script src="../assets/js/header.js"></script>
+
+    <div class="container">
+        <h1 class="hero-title" style="margin-bottom: 40px;">Your Shopping Cart</h1>
+
+        <div class="cart-container" id="cart-container-inner">
+            <!-- Cart items will be rendered here by cart-display.js -->
+            <div class="cart-items-panel" id="cart-items-list">
+                <div class="loading">Loading your cart...</div>
+            </div>
+
+            <div class="cart-summary-panel" id="cart-summary-panel">
+                <h3 class="summary-title">Order Summary</h3>
+                <div id="summary-details">
+                    <!-- Summary details will be rendered here -->
+                </div>
+                <button class="checkout-btn" onclick="location.href='checkout.html'">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JS -->
+    <script src="../assets/js/utils/cart-logic.js"></script>
+    <script src="../assets/js/cart-display.js"></script>
+</body>
+</html>

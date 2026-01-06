@@ -55,11 +55,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>${product.description || 'No description available.'}</p>
                 <div class="product-footer">
                     <span class="price">₨ ${parseFloat(product.price).toLocaleString()}</span>
-                    <button class="add-to-cart-btn" data-id="${product.product_id}">Add to Cart</button>
+                    <button class="add-to-cart-btn" 
+                        data-id="${product.product_id}"
+                        data-name="${product.product_name}"
+                        data-price="${product.price}"
+                        data-image="${product.image_url || ''}">
+                        Add to Cart
+                    </button>
                 </div>
             `;
 
             productsGrid.appendChild(productCard);
+        });
+
+        // Add event listeners to "Add to Cart" buttons
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (!window.CartLogic) {
+                    console.error('CartLogic not found');
+                    return;
+                }
+
+                const product = {
+                    id: e.target.dataset.id,
+                    name: e.target.dataset.name,
+                    price: parseFloat(e.target.dataset.price),
+                    image: e.target.dataset.image
+                };
+
+                window.CartLogic.addToCart(product);
+                
+                // Visual feedback
+                const originalText = e.target.innerText;
+                e.target.innerText = 'Added!';
+                e.target.style.background = '#4CAF50';
+                setTimeout(() => {
+                    e.target.innerText = originalText;
+                    e.target.style.background = '';
+                }, 1500);
+            });
         });
     }
 
