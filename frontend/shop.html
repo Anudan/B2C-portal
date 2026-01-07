@@ -38,8 +38,54 @@
         </p>
       </div>
 
-      <div class="varieties-grid">
-        <!-- Products will be loaded dynamically from shop.js -->
+       <!-- FILTER AND PRODUCTS LAYOUT -->
+      <div class="shop-layout">
+        
+        <!-- LEFT SIDEBAR - FILTERS -->
+        <aside class="filter-sidebar">
+          <div class="filter-section">
+            <h3 class="filter-title">Filter Products</h3>
+            
+            <!-- Price Range Filter -->
+            <div class="filter-group">
+              <h4 class="filter-label">Price Range</h4>
+              <div class="price-inputs">
+                <input type="number" id="minPrice" placeholder="Min" class="price-input">
+                <span class="price-separator">-</span>
+                <input type="number" id="maxPrice" placeholder="Max" class="price-input">
+              </div>
+              <button id="applyPriceFilter" class="filter-btn">Apply Filter</button>
+            </div>
+            
+            <!-- Sort Options -->
+            <div class="filter-group">
+              <h4 class="filter-label">Sort By Price</h4>
+              <div class="sort-options">
+                <label class="sort-option">
+                  <input type="radio" name="priceSort" value="low-to-high">
+                  <span>Low to High</span>
+                </label>
+                <label class="sort-option">
+                  <input type="radio" name="priceSort" value="high-to-low">
+                  <span>High to Low</span>
+                </label>
+                <label class="sort-option">
+                  <input type="radio" name="priceSort" value="default" checked>
+                  <span>Default</span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Reset Button -->
+            <button id="resetFilters" class="reset-btn">Reset All Filters</button>
+          </div>
+        </aside>
+
+        <!-- RIGHT SIDE - PRODUCTS GRID -->
+        <div class="varieties-grid">
+          <!-- Products will be loaded dynamically from shop.js -->
+        </div>
+
       </div>
 
     </div>
