@@ -11,6 +11,33 @@
       padding-bottom: 100px;
     }
 
+    .quick-contact {
+      margin-bottom: 40px;
+      display: flex;
+      gap: 48px;
+    }
+
+    .quick-contact-item span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--primary-soft);
+      margin-bottom: 8px;
+    }
+
+    .quick-contact-item a {
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      color: var(--dark);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .quick-contact-item a:hover {
+      color: var(--primary);
+    }
+
     .contact-hero {
       background: linear-gradient(140deg, #fbf4ec, #f2e7db);
       border-radius: 36px;
