@@ -97,7 +97,15 @@ function completeLoginDirectly(user) {
     } else {
         sessionStorage.setItem('user', JSON.stringify(user));
     }
-    window.location.href = user.role === 'admin' ? "../Admin/admin.html" : "index.html";
+
+    // Redirect back to the page the user was trying to reach, if specified
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get('next');
+    if (next) {
+        window.location.href = next;
+    } else {
+        window.location.href = user.role === 'admin' ? "../Admin/admin.html" : "index.html";
+    }
 }
 
 // ==========================================

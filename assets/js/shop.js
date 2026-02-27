@@ -84,6 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add event listeners to "Add to Cart" buttons
         document.querySelectorAll('.add-to-cart-btn').forEach(button => {
             button.addEventListener('click', (e) => {
+                // ── Auth guard: require login before adding to cart ──
+                const user = JSON.parse(
+                    sessionStorage.getItem('user') || localStorage.getItem('user') || 'null'
+                );
+                if (!user) {
+                    alert("You should be logged in to place an order");
+                    window.location.href = 'login.html?next=shop.html';
+                    return;
+                }
+
                 if (!window.CartLogic) {
                     console.error('CartLogic not found');
                     return;

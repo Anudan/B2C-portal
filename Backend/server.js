@@ -401,6 +401,29 @@ app.get('/api/orders', (req, res) => {
     });
 });
 
+// PATCH - Update order status (admin use)
+app.patch('/api/orders/:id/status', (req, res) => {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    if (!status || !validStatuses.includes(status)) {
+        return res.status(400).json({ success: false, message: 'Invalid status value' });
+    }
+
+    const query = 'UPDATE orders SET status = ? WHERE order_id = ?';
+    db.query(query, [status, orderId], (err, result) => {
+        if (err) {
+            console.error('Error updating order status:', err);
+            return res.status(500).json({ success: false, message: 'Failed to update order status' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+        res.json({ success: true, message: 'Order status updated' });
+    });
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
