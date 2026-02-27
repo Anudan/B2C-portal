@@ -335,6 +335,72 @@ app.delete('/api/products/:id', (req, res) => {
     });
 });
 
+// ============ ORDER API ENDPOINTS ============
+
+// POST - Place a new order
+app.post('/api/orders', (req, res) => {
+    const { firstName, lastName, email, address, city, phone, paymentMethod, items, totalAmount } = req.body;
+
+    // Basic validation
+    if (!firstName || !lastName || !email || !address || !city || !phone || !items || !items.length || !totalAmount) {
+        return res.status(400).json({
+            success: false,
+            message: 'Missing required order fields'
+        });
+    }
+
+    const shippingAddress = `${address}, ${city}`;
+    const userId = req.body.userId || null; // optional, if user is logged in
+
+    // Step 1: Insert into orders table
+    const orderQuery = `INSERT INTO orders (user_id, total_amount, status, shipping_address, contact_number)
+                        VALUES (?, ?, 'pending', ?, ?)`;
+
+    db.query(orderQuery, [userId, totalAmount, shippingAddress, phone], (err, orderResult) => {
+        if (err) {
+            console.error('Error creating order:', err);
+            return res.status(500).json({ success: false, message: 'Failed to place order' });
+        }
+
+        const orderId = orderResult.insertId;
+
+        // Step 2: Insert each item into order_items table
+        const itemValues = items.map(item => [orderId, item.productId || null, item.quantity, item.price]);
+        const itemsQuery = `INSERT INTO order_items (order_id, product_id, quantity, price_at_time) VALUES ?`;
+
+        db.query(itemsQuery, [itemValues], (err) => {
+            if (err) {
+                console.error('Error inserting order items:', err);
+                return res.status(500).json({ success: false, message: 'Order created but failed to save items' });
+            }
+
+            res.status(201).json({
+                success: true,
+                message: 'Order placed successfully',
+                orderId: orderId
+            });
+        });
+    });
+});
+
+// GET - Fetch all orders (admin use)
+app.get('/api/orders', (req, res) => {
+    const query = `
+        SELECT o.order_id, o.total_amount, o.status, o.shipping_address, o.contact_number, o.created_at,
+               u.name AS customer_name, u.email AS customer_email
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.user_id
+        ORDER BY o.created_at DESC
+    `;
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching orders:', err);
+            return res.status(500).json({ success: false, message: 'Failed to fetch orders' });
+        }
+        res.json({ success: true, orders: results });
+    });
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
